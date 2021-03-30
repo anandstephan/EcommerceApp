@@ -15,7 +15,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
     final cart = Provider.of<Cart>(context, listen: false);
-    print("test" + product.isFavorite.toString());
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
@@ -41,6 +41,19 @@ class ProductItem extends StatelessWidget {
                 icon: Icon(Icons.shopping_cart),
                 onPressed: () {
                   cart.addItem(product.id, product.price, product.title);
+                  Scaffold.of(context).hideCurrentSnackBar();
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Add Item to Cart"),
+                      duration: Duration(seconds: 2),
+                      action: SnackBarAction(
+                        label: "UNDO",
+                        onPressed: () {
+                          cart.removeItem(product.id);
+                        },
+                      ),
+                    ),
+                  );
                 },
                 color: Theme.of(context).accentColor,
               ),

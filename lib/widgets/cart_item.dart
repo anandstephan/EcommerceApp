@@ -37,12 +37,33 @@ class CartItem extends StatelessWidget {
                   child: FittedBox(child: Text('Rs $price'))),
             ),
             title: Text('$title'),
-            subtitle: Text('Total $quantity * $price'),
-            trailing: Text('$quantity x'),
+            subtitle: Text('Total ${quantity} * ${price}'),
+            trailing: Text('${quantity} x'),
           ),
         ),
       ),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('Are You Sure ?'),
+            content: Text('Do you want to remove the item from the Cart!'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(false);
+                  },
+                  child: Text("No")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(true);
+                  },
+                  child: Text("Yes")),
+            ],
+          ),
+        );
+      },
       onDismissed: (direction) {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
